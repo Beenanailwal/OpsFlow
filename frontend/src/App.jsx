@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound"
 import ProtectedRoute from "./components/ProtectedRoute"
 import { useState, useEffect } from "react"
 import AddProduct from "./pages/AddProduct"
+import Profile from "./pages/Profile"
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -107,7 +108,14 @@ function App() {
             />
 
             <Route path="/register" element={<Register />} />
-
+<Route
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  }
+/>
             <Route
               path="*"
               element={

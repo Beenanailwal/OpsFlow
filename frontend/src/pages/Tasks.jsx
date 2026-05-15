@@ -131,137 +131,216 @@ export default function Tasks() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
 
-      {/* HEADER */}
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold">Tasks</h1>
+  {/* HEADER */}
+  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-5">
+    <h1 className="text-xl md:text-2xl font-bold">Tasks</h1>
 
-        <button
-          onClick={() => setShowAdd(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          + Add Task
-        </button>
-      </div>
+    <button
+      onClick={() => setShowAdd(true)}
+      className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-4 py-2 rounded-lg hover:opacity-90"
+    >
+      + Add Task
+    </button>
+  </div>
 
-      {/* SEARCH + FILTER */}
-      <div className="flex gap-3 mb-4">
-        <input
-          placeholder="Tilte, Description"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border p-2 rounded w-1/2"
-        />
+  {/* SEARCH + FILTER */}
+  <div className="flex flex-col md:flex-row gap-3 mb-5">
 
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="border p-2 rounded"
-        >
-          <option value="all">All Status</option>
-          <option value="pending">Pending</option>
-          <option value="in-progress">In Progress</option>
-          <option value="completed">Completed</option>
-        </select>
-      </div>
+    <input
+      placeholder="Search title..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="border p-2 rounded-lg w-full md:w-1/2"
+    />
 
-      {/* TABLE */}
-      <table className="w-full bg-white rounded-xl shadow">
-        <thead className="bg-gray-50 text-gray-600 text-sm">
+    <select
+      value={filter}
+      onChange={(e) => setFilter(e.target.value)}
+      className="border p-2 rounded-lg w-full md:w-1/4"
+    >
+      <option value="all">All Status</option>
+      <option value="pending">Pending</option>
+      <option value="in-progress">In Progress</option>
+      <option value="completed">Completed</option>
+    </select>
+
+  </div>
+
+  {/* TABLE (desktop) */}
+  <div className="hidden md:block overflow-x-auto bg-white rounded-xl shadow">
+
+    <table className="w-full text-sm">
+
+      <thead className="bg-gray-50 text-gray-600">
+        <tr>
+          <th className="p-3 text-left">Title</th>
+          <th className="p-3 text-left">Description</th>
+          <th className="p-3 text-left">Status</th>
+          <th className="p-3 text-left">Created</th>
+          <th className="p-3 text-left">Updated</th>
+          <th className="p-3 text-center">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {currentTasks.length === 0 ? (
           <tr>
-            <th className="p-3 text-left">Title</th>
-            <th className="p-3 text-left">Description</th>
-            <th className="p-3 text-left">Status</th>
-            <th className="p-3 text-left">Created</th>
-            <th className="p-3 text-left">Updated</th>
-            <th className="p-3 text-center">Actions</th>
+            <td colSpan="6" className="text-center p-4">
+              No tasks found
+            </td>
           </tr>
-        </thead>
+        ) : (
+          currentTasks.map(task => (
+            <tr key={task._id} className="border-t hover:bg-gray-50">
 
-        <tbody>
-          {currentTasks.length === 0 ? (
-            <tr>
-              <td colSpan="6" className="text-center p-4">
-                No tasks found
+              <td className="p-3 font-medium">{task.title}</td>
+              <td className="p-3 text-gray-500">{task.description || "-"}</td>
+
+              <td className="p-3">
+                <span className={`px-3 py-1 text-xs rounded-full ${
+                  task.status === "completed"
+                    ? "bg-green-100 text-green-700"
+                    : task.status === "in-progress"
+                    ? "bg-blue-100 text-blue-700"
+                    : "bg-yellow-100 text-yellow-700"
+                }`}>
+                  {{
+                    "pending": "Pending",
+                    "in-progress": "In Progress",
+                    "completed": "Completed"
+                  }[task.status]}
+                </span>
               </td>
+
+              <td className="p-3 text-gray-500">
+                {new Date(task.createdAt).toLocaleDateString()}
+              </td>
+
+              <td className="p-3 text-gray-500">
+                {new Date(task.updatedAt).toLocaleDateString()}
+              </td>
+
+              <td className="p-3 flex gap-2 justify-center">
+
+                <button
+                  onClick={() => openEdit(task)}
+                  className="bg-yellow-500 text-white px-3 py-1 rounded text-xs"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => openDelete(task._id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded text-xs"
+                >
+                  Delete
+                </button>
+
+              </td>
+
             </tr>
-          ) : (
-            currentTasks.map((task) => (
-              <tr key={task._id} className="border-t">
+          ))
+        )}
+      </tbody>
 
-                <td className="p-3">{task.title}</td>
-                <td className="p-3">{task.description || "-"}</td>
+    </table>
+  </div>
 
-                <td className="p-3">
-                  <span className={`px-3 py-1 text-xs rounded-full ${
-                    task.status === "completed"
-                      ? "bg-green-100 text-green-700"
-                      : task.status === "in-progress"
-                      ? "bg-blue-100 text-blue-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}>
-                    {{
-                      "pending": "Pending",
-                      "in-progress": "In Progress",
-                      "completed": "Completed"
-                    }[task.status]}
-                  </span>
-                </td>
+  {/* 🔥 MOBILE VIEW (cards) */}
+  <div className="md:hidden flex flex-col gap-3">
 
-                <td className="p-3">
-                  {new Date(task.createdAt).toLocaleDateString()}
-                </td>
-
-                <td className="p-3">
-                  {new Date(task.updatedAt).toLocaleDateString()}
-                </td>
-
-                <td className="p-3 flex gap-2 justify-center">
-                  <button onClick={() => openEdit(task)}>Edit</button>
-                  <button onClick={() => openDelete(task._id)}>Delete</button>
-                </td>
-
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-
-      {/* 🔥 PAGINATION UI */}
-      <div className="flex justify-center gap-2 mt-4">
-        <button
-          onClick={() => setCurrentPage(p => p - 1)}
-          disabled={currentPage === 1}
-          className="px-3 py-1 bg-gray-200 rounded"
+    {currentTasks.length === 0 ? (
+      <p className="text-center text-gray-500">No tasks found</p>
+    ) : (
+      currentTasks.map(task => (
+        <div
+          key={task._id}
+          className="bg-white p-4 rounded-xl shadow border"
         >
-          Prev
-        </button>
 
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 rounded ${
-              currentPage === i + 1
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
+          <div className="flex justify-between items-start">
+            <h2 className="font-semibold">{task.title}</h2>
 
-        <button
-          onClick={() => setCurrentPage(p => p + 1)}
-          disabled={currentPage === totalPages}
-          className="px-3 py-1 bg-gray-200 rounded"
-        >
-          Next
-        </button>
-      </div>
+            <span className={`text-xs px-2 py-1 rounded ${
+              task.status === "completed"
+                ? "bg-green-100 text-green-700"
+                : task.status === "in-progress"
+                ? "bg-blue-100 text-blue-700"
+                : "bg-yellow-100 text-yellow-700"
+            }`}>
+              {task.status}
+            </span>
+          </div>
 
-      <ToastContainer />
-    </div>
+          <p className="text-sm text-gray-500 mt-1">
+            {task.description || "-"}
+          </p>
+
+          <div className="flex justify-between text-xs text-gray-400 mt-2">
+            <span>{new Date(task.createdAt).toLocaleDateString()}</span>
+            <span>{new Date(task.updatedAt).toLocaleDateString()}</span>
+          </div>
+
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={() => openEdit(task)}
+              className="flex-1 bg-yellow-500 text-white py-1 rounded"
+            >
+              Edit
+            </button>
+
+            <button
+              onClick={() => openDelete(task._id)}
+              className="flex-1 bg-red-500 text-white py-1 rounded"
+            >
+              Delete
+            </button>
+          </div>
+
+        </div>
+      ))
+    )}
+
+  </div>
+
+  {/* PAGINATION */}
+  <div className="flex flex-wrap justify-center gap-2 mt-6">
+
+    <button
+      onClick={() => setCurrentPage(p => p - 1)}
+      disabled={currentPage === 1}
+      className="px-3 py-1 bg-gray-200 rounded"
+    >
+      Prev
+    </button>
+
+    {[...Array(totalPages)].map((_, i) => (
+      <button
+        key={i}
+        onClick={() => setCurrentPage(i + 1)}
+        className={`px-3 py-1 rounded ${
+          currentPage === i + 1
+            ? "bg-blue-600 text-white"
+            : "bg-gray-100"
+        }`}
+      >
+        {i + 1}
+      </button>
+    ))}
+
+    <button
+      onClick={() => setCurrentPage(p => p + 1)}
+      disabled={currentPage === totalPages}
+      className="px-3 py-1 bg-gray-200 rounded"
+    >
+      Next
+    </button>
+
+  </div>
+
+  <ToastContainer />
+</div>
   )
 }

@@ -27,6 +27,7 @@ app.use("/api/tasks", taskRoutes)
 app.use("/api/products", productRoutes)
 app.use("/api/orders", orderRoutes)
 app.use("/api/admin", adminRoutes)
+app.use("/uploads", express.static("uploads"))
 
 app.get("/", (req, res) => {
   res.send("API running")

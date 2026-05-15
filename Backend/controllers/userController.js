@@ -55,7 +55,9 @@ export const loginUser = async(req,res,next) => {
                 _id:user._id,
                 name:user.name,
                 email:user.email,
+                role:user.role,
                 token:generateToken(user._id),
+                profileImage: user.profileImage,
                 message: "login success"
             })
         }
@@ -69,6 +71,7 @@ export const loginUser = async(req,res,next) => {
 }
 
 export const uploadProfileImage =  async(req, res) => {
+    // console.log("FILE:", req.file)
     try {
         const imagePath =  `/uploads/${req.file.filename}`
 
