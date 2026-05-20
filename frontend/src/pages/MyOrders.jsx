@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { getMyOrders, cancelOrder, updateOrderStatus } from "../services/orderApi"
+import { io } from "socket.io-client"
 
 function MyOrders() {
 
@@ -19,6 +20,14 @@ const handleStatusChange = async (id, status) => {
 
   useEffect(() => {
   loadOrders()
+
+  const socket = io("http://localhost:3000")
+
+  socket.on("orderUpdated", () => {
+    loadOrders()
+  })
+
+  return () => socket.disconnect()
 }, [])
 
   const handleCancel = async (id) => {

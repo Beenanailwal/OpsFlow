@@ -2,6 +2,8 @@ import express from "express"
 import dotenv from "dotenv"
 import connectDB from "./config/db.js"
 import cors from "cors"
+import { createServer } from "http"
+import { Server } from "socket.io"
 
 // routes
 import authRoutes from "./routes/userRoutes.js"
@@ -14,6 +16,12 @@ dotenv.config()
 connectDB()
 
 const app = express()
+const server = createServer(app) 
+export const io = new Server(server, { 
+  cors: {
+    origin: "http://localhost:5173"
+  }
+})
 
 app.use(express.json())
 
@@ -35,6 +43,6 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

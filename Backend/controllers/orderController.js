@@ -1,6 +1,7 @@
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import InventoryLog from "../models/InventoryLog.js";
+import { io } from "../server.js"
 
 export const createOrder = async (req,res) => {
     try {
@@ -64,6 +65,8 @@ export const updateOrderStatus = async(req,res) => {
 
             order.status = status
             await order.save()
+            
+            io.emit("orderUpdated", order)
             res.json(order)
 
     }catch(error) {

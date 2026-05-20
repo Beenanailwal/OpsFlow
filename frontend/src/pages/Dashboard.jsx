@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import { fetchTasks } from "../services/taskApi"
 import { getMyOrders } from "../services/orderApi"
+import API from "../services/api"
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState([])
   const [orders, setOrders] = useState([])
+  const [stats, setStats] = useState({})
 
   const loadData = async () => {
     try {
@@ -83,6 +85,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </div>  
   )
 }

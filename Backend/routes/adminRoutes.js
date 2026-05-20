@@ -3,6 +3,7 @@ import { protect, adminOnly } from "../middleware/authMiddleware.js"
 import { getAllUsers, deleteUser, changeUserRole } from "../controllers/adminController.js"
 import { getAllOrders } from "../controllers/orderController.js"
 
+
 const router = express.Router()
 
 router.get("/users", protect, adminOnly, getAllUsers)

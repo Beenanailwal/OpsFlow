@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar"
 import Login from "./pages/Login"
@@ -24,9 +24,7 @@ function App() {
   }, [])
 
   return (
-    <BrowserRouter>
-
-    
+  <>
   {isLoggedIn && (
     <Sidebar
   sidebarOpen={sidebarOpen}
@@ -127,8 +125,7 @@ function App() {
           </Routes>
         </div>
       </main>
-
-    </BrowserRouter>
+</>
   )
 }
 

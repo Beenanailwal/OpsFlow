@@ -2,11 +2,12 @@ import { useState, useEffect } from "react"
 import { createProduct, updateProduct } from "../services/productApi"
 import { useNavigate, useParams } from "react-router-dom"
 import API from "../services/api"
+import { toast, ToastContainer } from "react-toastify"
 
 export default function AddProduct() {
 
   const navigate = useNavigate()
-  const { id } = useParams() // 👈 agar id hai = edit mode
+  const { id } = useParams() // agar id hai = edit mode
 
   const [form, setForm] = useState({
     name: "",
@@ -15,7 +16,7 @@ export default function AddProduct() {
     stock: ""
   })
 
-  // 👉 EDIT MODE: data load
+  // EDIT MODE: data load
   useEffect(() => {
   if (id) {
     API.get(`/products/${id}`).then(res => {
@@ -55,14 +56,15 @@ export default function AddProduct() {
     if (id) {
       // 🔥 UPDATE
       await updateProduct(id, payload)
-      alert("Product Updated ✅")
+      toast.success("Product Updated")
     } else {
       // 🔥 CREATE
       await createProduct(payload)
-      alert("Product Added ✅")
+      toast.success("Product Added")
     }
-
-    navigate("/products")
+setTimeout(() => {
+  navigate("/products")
+}, 1000);
   }
 
   return (
@@ -124,7 +126,7 @@ export default function AddProduct() {
         </form>
 
       </div>
-
+<ToastContainer />
     </div>
   )
 }
