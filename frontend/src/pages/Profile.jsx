@@ -34,8 +34,8 @@ localStorage.setItem("user", JSON.stringify(updatedUser))
 setImage(res.data.image)
 
 window.dispatchEvent(new Event("userUpdated"))
-toast.success("Image uploaded successfully")
-  } catch (err) {
+toast.success("Uploaded successfully")
+  } catch (err) {s
     console.log(err)
   }
   finally {

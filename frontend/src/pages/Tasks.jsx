@@ -431,5 +431,5 @@ export default function Tasks() {
 )}
   <ToastContainer />
 </div>
-  )
+)
 }

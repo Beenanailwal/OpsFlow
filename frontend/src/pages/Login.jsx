@@ -18,14 +18,7 @@ export default function Login({setIsLoggedIn}) {
       })
 
       localStorage.setItem("token", data.token)
-      localStorage.setItem(
-  "user",
-  JSON.stringify({
-    name: data.name,
-    email: data.email,
-    profileImage: data.profileImage
-  })
-) 
+      localStorage.setItem("user", JSON.stringify({name: data.name, email: data.email}))
       localStorage.setItem("role", data.role )
  
       setIsLoggedIn(true) 

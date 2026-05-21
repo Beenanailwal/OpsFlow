@@ -1,31 +1,41 @@
-import { useLocation, useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import API from "../services/api"
+import { useState, useEffect } from "react"
 import { createOrder } from "../services/orderApi"
+import { ToastContainer, toast } from 'react-toastify'
 
 export default function CreateOrder() {
-
-  const { state } = useLocation()
+  const [cart, setCart] = useState([])
   const navigate = useNavigate()
-
-  const [cart] = useState(() => {
-  if (state) return JSON.parse(JSON.stringify(state)) // 🔥 deep copy
-  const saved = localStorage.getItem("cart")
-  return saved ? JSON.parse(saved) : []
-})
 
   const total = cart.reduce(
     (acc, item) => acc + item.product.price * item.quantity,
     0
   )
+  useEffect(() => {
+    const fetchCart = async () => {
+      const { data } = await API.get("/cart")
+      setCart(data.items || [])
+    }
 
+    fetchCart()
+  }, [])
+  
   const handleOrder = async () => {
+    try {
     if (!cart.length) return
 
     await createOrder(cart)
-    localStorage.removeItem("cart")
-
-    alert("Order Placed Successfully ✅")
-    navigate("/my-orders")
+    await API.delete("/cart")
+    setCart([])
+    toast.success("Order Placed Successfully")
+    setTimeout(() => {
+      navigate("/my-orders")
+    }, 1000);
+  }
+  catch (error) {
+    console.log(error.response.data)
+  }
   }
 
   return (
@@ -101,7 +111,7 @@ export default function CreateOrder() {
         </div>
 
       </div>
-
+      <ToastContainer />
     </div>
   )
 }

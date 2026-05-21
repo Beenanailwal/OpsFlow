@@ -5,7 +5,7 @@ import { getAllOrders } from "../controllers/orderController.js"
 
 
 const router = express.Router()
-
+    
 router.get("/users", protect, adminOnly, getAllUsers)
 
 router.delete("/users/:id", protect, adminOnly, deleteUser)
