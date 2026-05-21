@@ -28,7 +28,7 @@ console.log(name,email,password)
   }
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-100 z-50">
       <form
         onSubmit={handleSubmit}
         className="w-[380px] bg-white shadow-2xl rounded-2xl p-8"

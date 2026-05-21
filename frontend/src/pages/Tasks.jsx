@@ -131,7 +131,7 @@ export default function Tasks() {
   }
 
   return (
-    <div className="p-4 md:p-6">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
 
   {/* HEADER */}
   <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-5">
@@ -173,7 +173,7 @@ export default function Tasks() {
 
     <table className="w-full text-sm">
 
-      <thead className="bg-gray-50 text-gray-600">
+      <thead className="bg-gray-200 text-gray-600">
         <tr>
           <th className="p-3 text-left">Title</th>
           <th className="p-3 text-left">Description</th>
@@ -306,39 +306,72 @@ export default function Tasks() {
   </div>
 
   {/* PAGINATION */}
-  <div className="flex flex-wrap justify-center gap-2 mt-6">
+  {/* AMAZON STYLE PAGINATION */}
+<div className="flex items-center justify-center mt-8 gap-2">
 
-    <button
-      onClick={() => setCurrentPage(p => p - 1)}
-      disabled={currentPage === 1}
-      className="px-3 py-1 bg-gray-200 rounded"
-    >
-      Prev
-    </button>
+  {/* Prev */}
+  <button
+    onClick={() => setCurrentPage(p => p - 1)}
+    disabled={currentPage === 1}
+    className="px-3 py-1.5 text-sm border rounded-md bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+  >
+    ← Prev
+  </button>
 
-    {[...Array(totalPages)].map((_, i) => (
-      <button
-        key={i}
-        onClick={() => setCurrentPage(i + 1)}
-        className={`px-3 py-1 rounded ${
-          currentPage === i + 1
-            ? "bg-blue-600 text-white"
-            : "bg-gray-100"
-        }`}
-      >
-        {i + 1}
-      </button>
-    ))}
+  {/* Pages */}
+  <div className="flex items-center gap-1">
 
-    <button
-      onClick={() => setCurrentPage(p => p + 1)}
-      disabled={currentPage === totalPages}
-      className="px-3 py-1 bg-gray-200 rounded"
-    >
-      Next
-    </button>
+    {[...Array(totalPages)].map((_, i) => {
+      const page = i + 1
 
+      // show limited pages (Amazon style smart UI)
+      if (
+        page === 1 ||
+        page === totalPages ||
+        (page >= currentPage - 1 && page <= currentPage + 1)
+      ) {
+        return (
+          <button
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={`min-w-[36px] px-3 py-1.5 text-sm rounded-md border transition
+              ${
+                currentPage === page
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-white hover:bg-gray-100"
+              }`}
+          >
+            {page}
+          </button>
+        )
+      }
+
+      // dots (...)
+      if (
+        page === currentPage - 2 ||
+        page === currentPage + 2
+      ) {
+        return (
+          <span key={page} className="px-2 text-gray-400">
+            ...
+          </span>
+        )
+      }
+
+      return null
+    })}
   </div>
+
+  {/* Next */}
+  <button
+    onClick={() => setCurrentPage(p => p + 1)}
+    disabled={currentPage === totalPages}
+    className="px-3 py-1.5 text-sm border rounded-md bg-white hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+  >
+    Next →
+  </button>
+
+</div>
 {showAdd && (
   <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
     <div className="bg-white p-6 rounded-xl w-[90%] max-w-md">
